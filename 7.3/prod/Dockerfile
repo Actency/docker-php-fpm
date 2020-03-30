@@ -9,8 +9,6 @@ LABEL author="Hakim Rachidi"
 
 COPY config/php.ini /usr/local/etc/php/
 
-RUN docker-php-ext-install mysqli && docker-php-ext-install pdo_mysql
-
 RUN apt-get clean && apt-get update && apt-get install --fix-missing wget apt-transport-https lsb-release ca-certificates gnupg2 -y
 RUN echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list
 RUN echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list

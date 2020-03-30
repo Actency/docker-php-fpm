@@ -7,8 +7,6 @@ LABEL description="Developer PHP-FPM image"
 LABEL company="Actency"
 LABEL author="Hakim Rachidi"
 
-COPY config/php.ini /usr/local/etc/php/
-
 RUN docker-php-ext-install mysqli && docker-php-ext-install pdo_mysql
 
 RUN apt-get clean && apt-get update && apt-get install --fix-missing wget apt-transport-https lsb-release ca-certificates gnupg2 -y
@@ -17,8 +15,6 @@ RUN echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.lis
 RUN cd /tmp && wget https://www.dotdeb.org/dotdeb.gpg && apt-key add dotdeb.gpg
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
-
-RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 
 RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get install --fix-missing -y \
   git \
