@@ -1,5 +1,5 @@
 # Pull base image.
-FROM actency\docker-php-fpm:7.3
+FROM actency/docker-php-fpm:7.3
 
 # Some definitions
 LABEL php-version="7.3"
