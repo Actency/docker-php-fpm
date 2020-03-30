@@ -44,6 +44,7 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
   libssl-dev \
   npm \
   libzip-dev \
+  git \
   && rm -rf /var/lib/apt/lists/*
 
 # Install memcached 3.1.5 for PHP 7.3
@@ -70,7 +71,7 @@ RUN docker-php-ext-install \
   bcmath \
   ldap
 
-RUN pecl install mcrypt-1.0.1 && \
+RUN pecl install mcrypt-1.0.3 && \
     docker-php-ext-enable mcrypt
 
 # Create new web user for apache and grant sudo without password
@@ -82,10 +83,10 @@ RUN echo 'web ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN echo 'www-data ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Install YAML extension
-RUN pecl install yaml-2.0.2 && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/ext-yaml.ini
+RUN pecl install yaml-2.0.4 && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/ext-yaml.ini
 
 # Install APCu extension
-RUN pecl install apcu-5.1.8
+RUN pecl install apcu-5.1.18
 
 COPY core/memcached.conf /etc/memcached.conf
 
@@ -93,6 +94,10 @@ COPY core/memcached.conf /etc/memcached.conf
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
 	apt-get update && apt-get install -y nodejs && \
 	npm install npm@latest -g
+
+# Installation of Composer
+RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php
+RUN cd /usr/src && mv composer.phar /usr/bin/composer
 
 # Installation of drush 8 & 9
 RUN git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
