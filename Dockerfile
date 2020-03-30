@@ -54,21 +54,6 @@ RUN npm install -g gulp
 # Installation of Bower
 RUN npm install -g bower
 
-# Installation of Composer
-RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php
-RUN cd /usr/src && mv composer.phar /usr/bin/composer
-
-# Installation of drush 8 & 9
-RUN git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
-RUN cp -r /usr/local/src/drush/ /usr/local/src/drush8/
-RUN cp -r /usr/local/src/drush/ /usr/local/src/drush9/
-RUN cd /usr/local/src/drush8 && git checkout -f 8.1.0
-RUN cd /usr/local/src/drush8 && composer update && composer install
-RUN ln -s /usr/local/src/drush8/drush /usr/bin/drush8
-RUN cd /usr/local/src/drush9 && git checkout 9.1.0
-RUN cd /usr/local/src/drush9 && composer update && composer install
-RUN ln -s /usr/local/src/drush9/drush /usr/bin/drush9
-
 # Install xdebug.
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
