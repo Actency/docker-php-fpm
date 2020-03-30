@@ -51,8 +51,6 @@ RUN pecl install memcached-3.1.5 \
     && docker-php-ext-enable memcached
 
 # Install others php modules
-COPY docker-php-ext-install /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-php-ext-install
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
 RUN docker-php-ext-install \
