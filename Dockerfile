@@ -166,6 +166,6 @@ RUN chmod +x /usr/local/bin/docker-php-entrypoint
 
 VOLUME /var/www/html
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["docker-php-entrypoint"]
 EXPOSE 9000
 CMD ["php-fpm"]
