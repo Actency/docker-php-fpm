@@ -160,6 +160,9 @@ RUN chown www-data:www-data /var/www/.bashrc
 RUN echo "source .bashrc" >> /var/www/.profile ;\
     chown www-data:www-data /var/www/.profile
 
+# Connect as web by default
+RUN echo 'su web' >> /root/.bashrc
+
 # Set and run a custom entrypoint
 COPY core/docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
