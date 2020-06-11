@@ -1,12 +1,6 @@
 #!/bin/sh
 set -e
 
-if [ "$XDEBUG" = "1" ]; then
-	sudo sed -i 's/^;*\(.*xdebug\.so\)/\1/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-else
-	sudo sed -i 's/^\(.*xdebug\.so\)/;\1/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-fi
-
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
 	set -- php-fpm "$@"
