@@ -1,0 +1,6 @@
+# System Alias
+alias ll='ls -al'
+
+# Drupal Alias
+alias drush='/var/www/html/vendor/bin/drush'
+

@@ -73,3 +73,14 @@ RUN composer global require drupal/coder
 RUN ln -s ~/.composer/vendor/bin/phpcs /usr/local/bin
 RUN ln -s ~/.composer/vendor/bin/phpcbf /usr/local/bin
 RUN phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
+
+# Add web .bashrc config
+COPY config/bashrc /var/www/.bashrc
+RUN chown www-data:www-data /var/www/.bashrc
+
+# Set and run a custom entrypoint
+COPY core/docker-php-entrypoint /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-php-entrypoint
+
+# Copy php config
+COPY config/php.ini /usr/local/etc/php/
