@@ -1,13 +1,15 @@
 # Supported tags and respective `Dockerfile` links
-- [`7.3`, `latest`](https://github.com/Actency/docker-php-fpm/7.3/prod/Dockerfile)
-- [`7.3-dev`](https://github.com/Actency/docker-php-fpm/7.3/dev/Dockerfile)
+- [`7.4`, `latest`](https://github.com/Actency/docker-php-fpm/blob/7.4/Dockerfile)
+- [`7.4-dev`](https://github.com/Actency/docker-php-fpm/blob/7.4-dev/Dockerfile)
+- [`7.3`](https://github.com/Actency/docker-php-fpm/blob/7.3/Dockerfile)
+- [`7.3-dev`](https://github.com/Actency/docker-php-fpm/blob/7.3-dev/Dockerfile)
 
 # How to use this image
 
 ### Create a `Dockerfile` in your PHP project
 
 ```dockerfile
-FROM actency/docker-php-fpm:7.3
+FROM actency/docker-php-fpm:7.4
 COPY . /usr/src/myapp
 WORKDIR /usr/src/myapp
 CMD [ "php", "./your-script.php" ]
@@ -25,7 +27,7 @@ $ docker run -it --rm --name my-running-app my-php-app
 For many simple, single file projects, you may find it inconvenient to write a complete `Dockerfile`. In such cases, you can run a PHP script by using the PHP Docker image directly:
 
 ```console
-$ docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp actency/docker-php-fpm:7.3 php your-script.php
+$ docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp actency/docker-php-fpm:7.4 php your-script.php
 ```
 
 ## How to install more PHP extensions
@@ -39,7 +41,7 @@ We provide the helper scripts `docker-php-ext-configure`, `docker-php-ext-instal
 For example, if you want to have a PHP-FPM image with the `gd` extension, you can inherit the base image that you like, and write your own `Dockerfile` like this:
 
 ```dockerfile
-FROM actency/docker-php-fpm:7.3
+FROM actency/docker-php-fpm:7.4
 RUN apt-get update && apt-get install -y \
 		libfreetype6-dev \
 		libjpeg62-turbo-dev \
