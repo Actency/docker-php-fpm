@@ -1,8 +1,8 @@
 # Pull base image.
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 # Some definitions
-LABEL php-version="7.3"
+LABEL php-version="7.4"
 LABEL description="Production PHP-FPM image"
 LABEL company="Actency"
 LABEL author="Hakim Rachidi"
@@ -42,17 +42,18 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
   htop \
   libldap2-dev \
   libssl-dev \
+  libonig-dev \
   npm \
   libzip-dev \
   git \
   && rm -rf /var/lib/apt/lists/*
 
-# Install memcached 3.1.5 for PHP 7.3
-RUN pecl install memcached-3.1.5 \
+# Install memcached for PHP 7.4
+RUN pecl install memcached \
     && docker-php-ext-enable memcached
 
 # Install others php modules
-RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-configure gd --with-jpeg=/usr/include/
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
 RUN docker-php-ext-install \
   gd \
