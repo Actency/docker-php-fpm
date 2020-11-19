@@ -96,8 +96,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
 	npm install npm@latest -g
 
 # Installation of Composer
-RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php
-RUN cd /usr/src && mv composer.phar /usr/bin/composer
+RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer --version=1.10.17
 
 # Installation of drush 8 & 9
 RUN git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
