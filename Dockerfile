@@ -16,31 +16,23 @@ RUN cd /tmp && wget https://www.dotdeb.org/dotdeb.gpg && apt-key add dotdeb.gpg
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 
-RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get install --fix-missing -y \
+RUN apt-get clean && apt-get update && apt-get install --fix-missing -y \
   git \
   vim \
   nano \
-  zip \
   wget \
   bash-completion \
   htop \
   npm \
+  postgresql-client \
+  automake \
+  ruby2.7-dev \
+  libtool \
   && rm -rf /var/lib/apt/lists/*
-
-# postgresql-client-9.5
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - && echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" >> /etc/apt/sources.list && apt-get update && apt-get install -y postgresql-client-9.5
-
-# Install sass and gem dependency
-RUN apt-get install --fix-missing automake ruby2.5-dev libtool -y
 
 # SASS and Compass installation
 RUN gem install sass -v 3.7.3 ;\
     gem install compass;
-
-# Installation ex
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
-	apt-get update && apt-get install -y nodejs && \
-	npm install npm@latest -g
 
 # Installation of LESS
 RUN npm install -g less && npm install -g less-plugin-clean-css
