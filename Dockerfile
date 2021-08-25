@@ -9,7 +9,7 @@ LABEL author="Hakim Rachidi"
 
 COPY config/php.ini /usr/local/etc/php/
 
-RUN apt-get clean && apt-get update && apt-get install --fix-missing wget apt-transport-https lsb-release ca-certificates gnupg2 -y
+RUN apt-get clean && apt-get update && apt-get upgrade -y && apt-get install --fix-missing wget apt-transport-https lsb-release ca-certificates gnupg2 -y
 RUN echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list
 RUN echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list
 RUN cd /tmp && wget https://www.dotdeb.org/dotdeb.gpg && apt-key add dotdeb.gpg
@@ -91,7 +91,7 @@ RUN pecl install apcu-5.1.18
 COPY core/memcached.conf /etc/memcached.conf
 
 # Installation ex
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
 	apt-get update && apt-get install -y nodejs && \
 	npm install npm@latest -g
 
@@ -137,7 +137,7 @@ RUN ( \
 RUN curl https://drupalconsole.com/installer -L -o drupal.phar && mv drupal.phar /usr/local/bin/drupal && chmod +x /usr/local/bin/drupal
 
 # Install WKHTMLTOPDF
-RUN apt-get update && apt-get remove -y libqt4-dev qt4-dev-tools wkhtmltopdf && apt-get autoremove -y
+RUN apt-get update && apt-get remove -y wkhtmltopdf && apt-get autoremove -y
 RUN apt-get install openssl build-essential libssl-dev libxrender-dev git-core libx11-dev libxext-dev libfontconfig1-dev libfreetype6-dev fontconfig -y
 RUN mkdir /var/wkhtmltopdf
 RUN cd /var/wkhtmltopdf && wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz && tar xf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
