@@ -1,8 +1,8 @@
 # Pull base image.
-FROM php:7.4-fpm
+FROM php:8.1-fpm
 
 # Some definitions
-LABEL php-version="7.4"
+LABEL php-version="8.1"
 LABEL description="Production PHP-FPM image"
 LABEL company="Actency"
 LABEL author="Hakim Rachidi"
@@ -21,10 +21,8 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
 RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get install --fix-missing -y \
   ruby-dev \
   rubygems \
-  imagemagick \
   graphviz \
   sudo \
-  memcached \
   libmemcached-tools \
   libmemcached-dev \
   libpng-dev \
@@ -48,9 +46,6 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
   git \
   && rm -rf /var/lib/apt/lists/*
 
-# Install memcached for PHP 7.4
-RUN pecl install memcached \
-    && docker-php-ext-enable memcached
 
 # Install others php modules
 RUN docker-php-ext-configure gd --with-jpeg=/usr/include/
@@ -66,30 +61,21 @@ RUN docker-php-ext-install \
   calendar \
   intl \
   exif \
-  pgsql \
-  pdo_pgsql \
   ftp \
   bcmath \
   ldap
 
-RUN pecl install mcrypt-1.0.3 && \
-    docker-php-ext-enable mcrypt
-
-# Create new web user for apache and grant sudo without password
-RUN useradd web -d /var/www -g www-data -s /bin/bash
-RUN usermod -aG sudo web
-RUN echo 'web ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# Add sudo to www-data
-RUN echo 'www-data ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
 # Install YAML extension
-RUN pecl install yaml-2.0.4 && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/ext-yaml.ini
+RUN pecl install yaml-2.2.2 && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/ext-yaml.ini
 
-# Install APCu extension
-RUN pecl install apcu-5.1.18
+# Install APCu extension - NO LONGER SUPPORTED IN PHP8 !
+# RUN pecl install apcu-5.1.18
 
-COPY core/memcached.conf /etc/memcached.conf
+# Installation of APCu cache
+# RUN ( \
+#   echo "extension=apcu.so"; \
+#   echo "apc.enabled=1"; \
+#   ) > /usr/local/etc/php/conf.d/ext-apcu.ini
 
 # Installation ex
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
@@ -100,16 +86,12 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
 RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php
 RUN cd /usr/src && mv composer.phar /usr/bin/composer
 
-# Installation of drush 8 & 9
+# Installation of drush 11
 RUN git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
-RUN cp -r /usr/local/src/drush/ /usr/local/src/drush8/
-RUN cp -r /usr/local/src/drush/ /usr/local/src/drush9/
-RUN cd /usr/local/src/drush8 && git checkout -f 8.1.0
-RUN cd /usr/local/src/drush8 && composer update && composer install
-RUN ln -s /usr/local/src/drush8/drush /usr/bin/drush8
-RUN cd /usr/local/src/drush9 && git checkout 9.1.0
-RUN cd /usr/local/src/drush9 && composer update && composer install
-RUN ln -s /usr/local/src/drush9/drush /usr/bin/drush9
+RUN cp -r /usr/local/src/drush/ /usr/local/src/drush11/
+RUN cd /usr/local/src/drush11 && git checkout 11.1.0
+RUN cd /usr/local/src/drush11 && composer update && composer install
+RUN ln -s /usr/local/src/drush11/drush /usr/bin/drush11
 
 # install msmtp
 RUN set -x \
@@ -117,12 +99,6 @@ RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends msmtp && rm -r /var/lib/apt/lists/*
 ADD core/msmtprc.conf /usr/local/etc/msmtprc
 ADD core/php-smtp.ini /usr/local/etc/php/conf.d/php-smtp.ini
-
-# Installation of APCu cache
-RUN ( \
-  echo "extension=apcu.so"; \
-  echo "apc.enabled=1"; \
-  ) > /usr/local/etc/php/conf.d/ext-apcu.ini
 
 # Installation of Opcode cache
 RUN ( \
@@ -134,17 +110,13 @@ RUN ( \
   echo "opcache.enable_cli=1"; \
   ) > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-# Install Drupal Console for Drupal 8
-RUN curl https://drupalconsole.com/installer -L -o drupal.phar && mv drupal.phar /usr/local/bin/drupal && chmod +x /usr/local/bin/drupal
+# Create new web user for apache and grant sudo without password
+RUN useradd web -d /var/www -g www-data -s /bin/bash
+RUN usermod -aG sudo web
+RUN echo 'web ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# Install WKHTMLTOPDF
-RUN apt-get update && apt-get remove -y wkhtmltopdf && apt-get autoremove -y
-RUN apt-get install openssl build-essential libssl-dev libxrender-dev git-core libx11-dev libxext-dev libfontconfig1-dev libfreetype6-dev fontconfig -y
-RUN mkdir /var/wkhtmltopdf
-RUN cd /var/wkhtmltopdf && wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz && tar xf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-RUN cp /var/wkhtmltopdf/wkhtmltox/bin/wkhtmltopdf /bin/wkhtmltopdf && cp /var/wkhtmltopdf/wkhtmltox/bin/wkhtmltoimage /bin/wkhtmltoimage
-RUN chown -R www-data:www-data /var/wkhtmltopdf
-RUN chmod +x /bin/wkhtmltopdf && chmod +x /bin/wkhtmltoimage
+# Add sudo to www-data
+RUN echo 'www-data ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # create directory for ssh keys
 RUN mkdir /var/www/.ssh/
