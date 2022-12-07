@@ -78,7 +78,7 @@ RUN pecl install yaml-2.2.2 && echo "extension=yaml.so" > /usr/local/etc/php/con
 #   ) > /usr/local/etc/php/conf.d/ext-apcu.ini
 
 # Installation ex
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
 	apt-get update && apt-get install -y nodejs && \
 	npm install npm@latest -g
 
