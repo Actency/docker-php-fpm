@@ -26,10 +26,10 @@ RUN apt-get clean && apt-get update && apt-get install --fix-missing -y \
   libtool \
   && rm -rf /var/lib/apt/lists/*
 
-# SASS and Compass installation
-RUN gem install sass -v 3.7.3 ;\
-    gem install compass;
-
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+	apt-get update && apt-get install -y nodejs && \
+	npm install npm@latest -g
+  
 # Installation of LESS
 RUN npm install -g less && npm install -g less-plugin-clean-css
 
