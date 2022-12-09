@@ -1,13 +1,11 @@
 # Pull base image.
-FROM actency/docker-php-fpm:7.4
+FROM actency/docker-php-fpm:8.1
 
 # Some definitions
-LABEL php-version="7.4"
+LABEL php-version="8.1"
 LABEL description="Developer PHP-FPM image"
 LABEL company="Actency"
 LABEL author="Hakim Rachidi"
-
-RUN docker-php-ext-install mysqli && docker-php-ext-install pdo_mysql
 
 RUN apt-get clean && apt-get update && apt-get install --fix-missing wget apt-transport-https lsb-release ca-certificates gnupg2 -y
 RUN echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list
@@ -23,8 +21,6 @@ RUN apt-get clean && apt-get update && apt-get install --fix-missing -y \
   wget \
   bash-completion \
   htop \
-  npm \
-  postgresql-client \
   automake \
   ruby2.7-dev \
   libtool \
