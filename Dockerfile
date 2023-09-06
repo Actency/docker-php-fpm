@@ -1,5 +1,5 @@
 # Pull base image.
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Some definitions
 LABEL php-version="8.1"
@@ -49,7 +49,7 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
 
 # Install others php modules
 RUN docker-php-ext-configure gd --with-jpeg=/usr/include/
-RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
+RUN docker-php-ext-configure ldap 
 RUN docker-php-ext-install \
   gd \
   mbstring \
@@ -78,9 +78,8 @@ RUN pecl install yaml-2.2.2 && echo "extension=yaml.so" > /usr/local/etc/php/con
 #   ) > /usr/local/etc/php/conf.d/ext-apcu.ini
 
 # Installation ex
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-	apt-get update && apt-get install -y nodejs && \
-	npm install npm@latest -g
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+	apt-get update && apt-get install -y nodejs 
 
 # Installation of Composer
 RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php
@@ -139,6 +138,22 @@ RUN echo 'su web' >> /root/.bashrc
 # Set and run a custom entrypoint
 COPY core/docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
+
+#Install libwebp-dev and imagemagick
+RUN apt-get update && \
+   apt-get install --fix-missing -y \
+   libwebp-dev \
+   imagemagick \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-configure gd --with-jpeg --with-webp
+RUN docker-php-ext-install gd
+
+# Upgrade to composer 2
+RUN composer self-update --2
+
+#required for log
+RUN docker-php-ext-install sockets
 
 VOLUME /var/www/html
 
