@@ -1,5 +1,6 @@
 # Supported tags and respective `Dockerfile` links
-- [`8.1`, `latest`](https://github.com/Actency/docker-php-fpm/blob/8.1/Dockerfile)
+- [`8.2`, `latest`](https://github.com/Actency/docker-php-fpm/blob/8.2/Dockerfile)
+- [`8.1`](https://github.com/Actency/docker-php-fpm/blob/8.1/Dockerfile)
 - [`7.4`](https://github.com/Actency/docker-php-fpm/blob/7.4/Dockerfile)
 - [`7.4-dev`](https://github.com/Actency/docker-php-fpm/blob/7.4-dev/Dockerfile)
 - [`7.3`](https://github.com/Actency/docker-php-fpm/blob/7.3/Dockerfile)
