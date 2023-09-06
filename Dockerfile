@@ -2,7 +2,7 @@
 FROM php:8.2-fpm
 
 # Some definitions
-LABEL php-version="8.1"
+LABEL php-version="8.2"
 LABEL description="Production PHP-FPM image"
 LABEL company="Actency"
 LABEL author="Hakim Rachidi"
