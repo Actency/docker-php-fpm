@@ -2,7 +2,7 @@
 FROM php:8.2-fpm
 
 # Some definitions
-LABEL php-version="8.2"
+LABEL php-version="8.2-fpm"
 LABEL description="Production PHP-FPM image"
 LABEL company="Actency"
 LABEL author="Hakim Rachidi"
@@ -50,6 +50,8 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
 # Install others php modules
 RUN docker-php-ext-configure gd --with-jpeg=/usr/include/
 RUN docker-php-ext-configure ldap 
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pgsql pdo_pgsql
 RUN docker-php-ext-install \
   gd \
   mbstring \
