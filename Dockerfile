@@ -44,6 +44,7 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
   npm \
   libzip-dev \
   git \
+  postgresql \ 
   && rm -rf /var/lib/apt/lists/*
 
 
