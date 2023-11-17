@@ -17,14 +17,12 @@ RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
-
+RUN apt-get update && apt-get install apt-file -y && apt-file update && apt-get install vim -y
 RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get install --fix-missing -y \
   ruby-dev \
   rubygems \
   graphviz \
   sudo \
-  vim \
-  vi \
   libmemcached-tools \
   libmemcached-dev \
   libpng-dev \
