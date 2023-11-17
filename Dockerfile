@@ -23,6 +23,8 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
   rubygems \
   graphviz \
   sudo \
+  vim \
+  vi \
   libmemcached-tools \
   libmemcached-dev \
   libpng-dev \
