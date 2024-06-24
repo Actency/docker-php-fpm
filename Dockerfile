@@ -4,8 +4,8 @@ FROM php:8.2-fpm
 # Some definitions
 LABEL php-version="8.2-fpm"
 LABEL description="Production PHP-FPM image"
-LABEL company="Actency"
-LABEL author="Hakim Rachidi"
+LABEL company="SCALE SAFELY"
+LABEL author="ZAKARIA KASSRAOUI"
 
 COPY config/php.ini /usr/local/etc/php/
 
@@ -44,14 +44,12 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
   libmcrypt-dev \
   libxml2-dev \
   libxslt1-dev \
-  mariadb-client \
   linux-libc-dev \
   libyaml-dev \
   zlib1g-dev \
   libicu-dev \
   libpq-dev \
   bash-completion \
-  htop \
   libldap2-dev \
   libssl-dev \
   libonig-dev \
@@ -72,8 +70,6 @@ RUN docker-php-ext-install \
   mbstring \
   zip \
   soap \
-  pdo_mysql \
-  mysqli \
   opcache \
   calendar \
   intl \
@@ -84,15 +80,6 @@ RUN docker-php-ext-install \
 
 # Install YAML extension
 RUN pecl install yaml-2.2.2 && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/ext-yaml.ini
-
-# Install APCu extension - NO LONGER SUPPORTED IN PHP8 !
-# RUN pecl install apcu-5.1.18
-
-# Installation of APCu cache
-# RUN ( \
-#   echo "extension=apcu.so"; \
-#   echo "apc.enabled=1"; \
-#   ) > /usr/local/etc/php/conf.d/ext-apcu.ini
 
 # Installation ex
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
