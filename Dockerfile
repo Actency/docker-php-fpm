@@ -31,7 +31,7 @@ RUN docker-php-ext-enable sqlsrv pdo_sqlsrv
 
 
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
-RUN apt-get update && apt-get install apt-file -y && apt-file update && apt-get install vim -y
+RUN apt-get update && apt-get install apt-file -y && apt-file update 
 RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get install --fix-missing -y \
   ruby-dev \
   rubygems \
