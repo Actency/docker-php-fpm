@@ -23,18 +23,16 @@ RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt
 ENV ACCEPT_EULA=Y
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
 RUN curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/mssql-release.list 
-RUN apt-get update 
-RUN ACCEPT_EULA=Y apt-get -y --no-install-recommends install msodbcsql17 unixodbc-dev mssql-tools18
+RUN apt-get update && apt-get -y --no-install-recommends install msodbcsql17 && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 RUN pecl install sqlsrv
 RUN pecl install pdo_sqlsrv
 RUN docker-php-ext-enable sqlsrv pdo_sqlsrv
 
-RUN apt-get update && apt-get install apt-file -y && apt-file update 
+RUN apt-get update && apt-get install apt-file -y && apt-file update && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives	
 RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get install --fix-missing -y \
   ruby-dev \
   rubygems \
   graphviz \
-  sudo \
   libmemcached-tools \
   libmemcached-dev \
   libpng-dev \
@@ -112,11 +110,6 @@ RUN ( \
 
 # Create new web user for apache and grant sudo without password
 RUN useradd web -d /var/www -g www-data -s /bin/bash
-RUN usermod -aG sudo web
-RUN echo 'web ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# Add sudo to www-data
-RUN echo 'www-data ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # create directory for ssh keys
 RUN mkdir /var/www/.ssh/
@@ -133,9 +126,6 @@ RUN chown www-data:www-data /var/www/.bashrc
 RUN echo "source .bashrc" >> /var/www/.profile ;\
     chown www-data:www-data /var/www/.profile
 
-# Connect as web by default
-RUN echo 'su web' >> /root/.bashrc
-
 # Set and run a custom entrypoint
 COPY core/docker-php-entrypoint /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-php-entrypoint
@@ -145,7 +135,7 @@ RUN apt-get update && \
    apt-get install --fix-missing -y \
    libwebp-dev \
    imagemagick \
-&& rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
+   && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 RUN docker-php-ext-configure gd --with-jpeg --with-webp
 RUN docker-php-ext-install gd
