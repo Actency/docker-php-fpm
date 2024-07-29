@@ -29,8 +29,6 @@ RUN pecl install sqlsrv
 RUN pecl install pdo_sqlsrv
 RUN docker-php-ext-enable sqlsrv pdo_sqlsrv
 
-
-RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 RUN apt-get update && apt-get install apt-file -y && apt-file update 
 RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get install --fix-missing -y \
   ruby-dev \
@@ -57,8 +55,7 @@ RUN apt-get clean && apt-get update && apt-cache search php-mysql && apt-get ins
   libzip-dev \
   git \
   postgresql \ 
-  && rm -rf /var/lib/apt/lists/*
-
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 # Install others php modules
 RUN docker-php-ext-configure gd --with-jpeg=/usr/include/
@@ -83,7 +80,7 @@ RUN pecl install yaml-2.2.2 && echo "extension=yaml.so" > /usr/local/etc/php/con
 
 # Installation ex
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-	apt-get update && apt-get install -y nodejs 
+	apt-get update && apt-get install -y nodejs && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 # Installation of Composer
 RUN cd /usr/src && curl -sS http://getcomposer.org/installer | php
@@ -148,7 +145,7 @@ RUN apt-get update && \
    apt-get install --fix-missing -y \
    libwebp-dev \
    imagemagick \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 RUN docker-php-ext-configure gd --with-jpeg --with-webp
 RUN docker-php-ext-install gd
