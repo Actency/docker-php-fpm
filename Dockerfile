@@ -6,7 +6,7 @@ LABEL php-version="8.2-fpm"
 LABEL description="Production PHP-FPM image"
 LABEL company="SCALE SAFELY"
 LABEL author="ZAKARIA KASSRAOUI"
-
+ENV COMPOSER_ALLOW_SUPERUSER=1
 COPY config/php.ini /usr/local/etc/php/
 
 RUN apt-get clean && apt-get update && apt-get install --fix-missing wget apt-transport-https lsb-release ca-certificates gnupg2 -y
