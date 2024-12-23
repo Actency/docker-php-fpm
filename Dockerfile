@@ -9,9 +9,6 @@ LABEL author="ZAKARIA KASSRAOUI"
 
 COPY config/php.ini /usr/local/etc/php/
 
-#Fix allow SU
-ENV COMPOSER_ALLOW_SUPERUSER=1
-
 RUN apt-get clean && apt-get update && apt-get install --fix-missing wget apt-transport-https lsb-release ca-certificates gnupg2 -y
 RUN echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list
 RUN echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list
